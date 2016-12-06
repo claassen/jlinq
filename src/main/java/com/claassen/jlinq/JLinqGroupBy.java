@@ -43,7 +43,7 @@ public class JLinqGroupBy<T, G> extends JLinqBase<JLinqGroup<T, G>> {
         List<JLinqGroup<T, G>> jlGroups = new ArrayList<>();
 
         for(G key : groups.keySet()) {
-            jlGroups.add(new JLinqGroup<T, G>(key, new JLinqCollection<T>(groups.get(key))));
+            jlGroups.add(new JLinqGroup<>(key, new JLinqCollection<T>(groups.get(key))));
         }
 
         iterator = jlGroups.iterator();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
 
-public class JLinqBase<T> {
+public abstract class JLinqBase<T> {
 
     protected Supplier<T> _next;
     protected Supplier<Boolean> _hasNext;
@@ -28,11 +28,7 @@ public class JLinqBase<T> {
     }
 
     public T first() {
-        if(_hasNext.get()) {
-            return _next.get();
-        }
-
-        return null;
+        return _next.get();
     }
 
     public T last() {
@@ -69,5 +65,29 @@ public class JLinqBase<T> {
 
     public <U> JLinqJoin<T, U> join(BiPredicate<T, U> predicate, JLinqBase<U> source2) {
         return new JLinqJoin<>(predicate, this, source2);
+    }
+
+    public JLinqUnion<T> union(JLinqBase<T> ...otherSources) {
+        List<JLinqBase<T>> sources = new ArrayList<>();
+
+        sources.add(this);
+
+        for(JLinqBase<T> source : otherSources) {
+            sources.add(source);
+        }
+
+        return new JLinqUnion<>(sources);
+    }
+
+    public JLinqZip<T> zip(JLinqBase<T> ...otherSources) {
+        List<JLinqBase<T>> sources = new ArrayList<>();
+
+        sources.add(this);
+
+        for(JLinqBase<T> source : otherSources) {
+            sources.add(source);
+        }
+
+        return new JLinqZip<>(0, sources);
     }
 }

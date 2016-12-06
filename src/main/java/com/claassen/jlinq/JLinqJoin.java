@@ -1,6 +1,8 @@
 package com.claassen.jlinq;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
@@ -13,7 +15,7 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
 
     private boolean fetched = false;
 
-    private Tuple<T, U> peekNext;
+    private Optional<Tuple<T, U>> peekNext;
 
     private BiPredicate<T, U> condition;
 
@@ -25,7 +27,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
                 fetch(source1, source2);
             }
 
-            Tuple<T, U> result = peekNext;
+            if(!peekNext.isPresent()) {
+                throw new NoSuchElementException();
+            }
+
+            Tuple<T, U> result = peekNext.get();
 
             peekNext = getNext();
 
@@ -37,11 +43,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
                 fetch(source1, source2);
             }
 
-            return isMatch(peekNext);
+            return peekNext.isPresent();
         });
     }
 
-    private Tuple<T, U> getNext() {
+    private Optional<Tuple<T, U>> getNext() {
         while(source1Index < source1Items.size() && source2Index < source2Items.size()) {
             T item1 = source1Items.get(source1Index);
             U item2 = source2Items.get(source2Index);
@@ -54,11 +60,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
             }
 
             if(condition.test(item1, item2)) {
-                return new Tuple<>(item1, item2);
+                return Optional.of(new Tuple<>(item1, item2));
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     private boolean isMatch(Tuple<T, U> tuple) {

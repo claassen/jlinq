@@ -1,5 +1,7 @@
 package com.claassen.jlinq;
 
+import java.util.NoSuchElementException;
+
 public class JLinqTake<T> extends JLinqBase<T> {
 
     private int taken;
@@ -13,7 +15,7 @@ public class JLinqTake<T> extends JLinqBase<T> {
                 return source._next.get();
             }
 
-            return null;
+            throw new NoSuchElementException();
         });
 
         setHasNext(() -> source._hasNext.get() && taken < count);
