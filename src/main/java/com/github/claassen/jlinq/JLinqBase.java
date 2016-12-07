@@ -3,7 +3,7 @@ package com.github.claassen.jlinq;
 import java.util.*;
 import java.util.function.*;
 
-public abstract class JLinqBase<T> {
+public abstract class JLinqBase<T> implements Iterator<T> {
 
     protected Supplier<T> _next;
     protected Supplier<Boolean> _hasNext;
@@ -16,14 +16,12 @@ public abstract class JLinqBase<T> {
         this._hasNext = hasNext;
     }
 
-    public List<T> toList() {
-        List<T> items = new ArrayList<>();
+    public T next() {
+        return _next.get();
+    }
 
-        while(_hasNext.get()) {
-            items.add(_next.get());
-        }
-
-        return items;
+    public boolean hasNext() {
+        return _hasNext.get();
     }
 
     public Iterable<T> toIterable() {
@@ -40,15 +38,25 @@ public abstract class JLinqBase<T> {
         };
     }
 
+    public List<T> toList() {
+        List<T> items = new ArrayList<>();
+
+        while(hasNext()) {
+            items.add(next());
+        }
+
+        return items;
+    }
+
     public T first() {
-        return _next.get();
+        return next();
     }
 
     public T last() {
         T item = null;
 
-        while(_hasNext.get()) {
-            item = _next.get();
+        while(hasNext()) {
+            item = next();
         }
 
         return item;
@@ -57,8 +65,8 @@ public abstract class JLinqBase<T> {
     public <R> R reduce(R identity, BiFunction<R, T, R> accumulator) {
         R result = identity;
 
-        while(_hasNext.get()) {
-            result = accumulator.apply(result, _next.get());
+        while(hasNext()) {
+            result = accumulator.apply(result, next());
         }
 
         return result;

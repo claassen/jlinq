@@ -1,6 +1,5 @@
 package com.github.claassen.jlinq;
 
-import com.claassen.jlinq.JLinqBase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -23,14 +22,17 @@ public class JLinqBaseTest {
     }
 
     @Test
-    public void testToList() {
+    public void testAsIterator() {
         List<TestClass> items = makeItems();
 
         TestJLinqBaseImplementation<TestClass> base = new TestJLinqBaseImplementation<>(items);
 
-        List<TestClass> itemsToList = base.toList();
+        Iterator<TestClass> iterator = base;
 
-        assertThat(itemsToList, hasItems(items.get(0), items.get(1), items.get(2)));
+        assertThat(iterator.next(), is(items.get(0)));
+        assertThat(iterator.next(), is(items.get(1)));
+        assertThat(iterator.next(), is(items.get(2)));
+        assertThat(iterator.hasNext(), is(false));
     }
 
     @Test
@@ -45,6 +47,17 @@ public class JLinqBaseTest {
         assertThat(iterator.next(), is(items.get(1)));
         assertThat(iterator.next(), is(items.get(2)));
         assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    public void testToList() {
+        List<TestClass> items = makeItems();
+
+        TestJLinqBaseImplementation<TestClass> base = new TestJLinqBaseImplementation<>(items);
+
+        List<TestClass> itemsToList = base.toList();
+
+        assertThat(itemsToList, hasItems(items.get(0), items.get(1), items.get(2)));
     }
 
     @Test
