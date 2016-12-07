@@ -11,6 +11,8 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'io.codearte.nexus-staging'
 
+sourceCompatibility = '1.8'
+
 subprojects {
 
     task javadocJar(type: Jar) {

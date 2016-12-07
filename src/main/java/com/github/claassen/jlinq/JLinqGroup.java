@@ -1,4 +1,4 @@
-package com.claassen.jlinq;
+package com.github.claassen.jlinq;
 
 public class JLinqGroup<T, G> extends JLinqBase<T> {
 

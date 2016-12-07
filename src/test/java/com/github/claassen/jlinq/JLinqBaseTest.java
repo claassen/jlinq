@@ -1,5 +1,6 @@
+package com.github.claassen.jlinq;
+
 import com.claassen.jlinq.JLinqBase;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -29,8 +30,21 @@ public class JLinqBaseTest {
 
         List<TestClass> itemsToList = base.toList();
 
-
         assertThat(itemsToList, hasItems(items.get(0), items.get(1), items.get(2)));
+    }
+
+    @Test
+    public void testToIterable() {
+        List<TestClass> items = makeItems();
+
+        TestJLinqBaseImplementation<TestClass> base = new TestJLinqBaseImplementation<>(items);
+
+        Iterator<TestClass> iterator = base.toIterable().iterator();
+
+        assertThat(iterator.next(), is(items.get(0)));
+        assertThat(iterator.next(), is(items.get(1)));
+        assertThat(iterator.next(), is(items.get(2)));
+        assertThat(iterator.hasNext(), is(false));
     }
 
     @Test
@@ -40,7 +54,6 @@ public class JLinqBaseTest {
         TestJLinqBaseImplementation<TestClass> base = new TestJLinqBaseImplementation<>(items);
 
         TestClass first = base.first();
-
 
         assertThat(first, is(items.get(0)));
     }
@@ -87,6 +100,18 @@ public class JLinqBaseTest {
 
         public void setY(Integer y) {
             this.y = y;
+        }
+
+        @Override
+        public int hashCode() {
+            return (this.x + "~" + this.y).hashCode();
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            return other instanceof TestClass &&
+                    ((TestClass) other).getX().equals(this.getX()) &&
+                    ((TestClass) other).getY().equals(this.getY());
         }
     }
 

@@ -1,4 +1,4 @@
-package com.claassen.jlinq;
+package com.github.claassen.jlinq;
 
 import java.util.List;
 import java.util.NoSuchElementException;

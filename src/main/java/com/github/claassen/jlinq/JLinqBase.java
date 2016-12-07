@@ -1,4 +1,4 @@
-package com.claassen.jlinq;
+package com.github.claassen.jlinq;
 
 import java.util.*;
 import java.util.function.*;
@@ -30,12 +30,12 @@ public abstract class JLinqBase<T> {
         return () -> new Iterator<T>() {
             @Override
             public boolean hasNext() {
-                return hasNext();
+                return _hasNext.get();
             }
 
             @Override
             public T next() {
-                return next();
+                return _next.get();
             }
         };
     }
