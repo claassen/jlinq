@@ -1,7 +1,6 @@
 package com.claassen.jlinq;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.*;
 
 public abstract class JLinqBase<T> {
@@ -25,6 +24,20 @@ public abstract class JLinqBase<T> {
         }
 
         return items;
+    }
+
+    public Iterable<T> toIterable() {
+        return () -> new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return hasNext();
+            }
+
+            @Override
+            public T next() {
+                return next();
+            }
+        };
     }
 
     public T first() {
@@ -67,27 +80,25 @@ public abstract class JLinqBase<T> {
         return new JLinqJoin<>(predicate, this, source2);
     }
 
-    public JLinqUnion<T> union(JLinqBase<T> ...otherSources) {
+    public final JLinqUnion<T> union(JLinqBase<T>... otherSources) {
         List<JLinqBase<T>> sources = new ArrayList<>();
 
         sources.add(this);
 
-        for(JLinqBase<T> source : otherSources) {
-            sources.add(source);
-        }
+        Collections.addAll(sources, otherSources);
 
         return new JLinqUnion<>(sources);
     }
 
-    public JLinqZip<T> zip(JLinqBase<T> ...otherSources) {
-        List<JLinqBase<T>> sources = new ArrayList<>();
-
-        sources.add(this);
-
-        for(JLinqBase<T> source : otherSources) {
-            sources.add(source);
-        }
-
-        return new JLinqZip<>(0, sources);
-    }
+//    public JLinqZip<T> zip(JLinqBase<T> ...otherSources) {
+//        List<JLinqBase<T>> sources = new ArrayList<>();
+//
+//        sources.add(this);
+//
+//        for(JLinqBase<T> source : otherSources) {
+//            sources.add(source);
+//        }
+//
+//        return new JLinqZip<>(0, sources);
+//    }
 }
