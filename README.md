@@ -81,7 +81,7 @@ List<Integer> three = query(Arrays.asList(1, 2, 3, 4, 5))
 
 **Sum/Avg/Min/Max**
 
-It necessary to use the numeric version of `query`, `queryn` in orde to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation function always return `double`.
+It necessary to use the numeric version of `query`: `queryn` in order to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation function always return `double`.
 
 ```java
 double sum = queryn(Arrays.asList(1, 2, 3)).sum();
