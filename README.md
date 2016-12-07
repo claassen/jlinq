@@ -1,5 +1,5 @@
 # JLinq
-[![Build Status](https://travis-ci.org/claassen/jlinq.svg?branch=master)](https://travis-ci.org/claassen/jlinq)
+[![Build Status](https://travis-ci.org/claassen/jlinq.svg?branch=master)](https://travis-ci.org/claassen/jlinq) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A collection querying library alternative to Java 8 Streams with an API similar to Linq in C#.
 
