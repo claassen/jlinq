@@ -85,8 +85,8 @@ if (project.hasProperty('release')) {
     }
 }
 
-ossrhUser='REPLACEME'
-ossrhPassword='REPLACEME'
+def ossrhUser='REPLACEME'
+def ossrhPassword='REPLACEME'
 
 nexusStaging {
     username = ossrhUser
