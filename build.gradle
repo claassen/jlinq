@@ -41,6 +41,12 @@ artifacts {
     archives sourcesJar
 }
 
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
 if(project.hasProperty("release")) {
 
     signing {
