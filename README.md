@@ -1,7 +1,7 @@
 # JLinq
 [![Build Status](https://travis-ci.org/claassen/jlinq.svg?branch=master)](https://travis-ci.org/claassen/jlinq) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A collection querying library alternative to Java 8 Streams with an API similar to Linq in C#. JLinq operates on Iterables and performs lazy evaluation wherever possible (for example lazy evaluation is not possible when using `join`).
+A collection querying library alternative to Java 8 Streams with an API similar to Linq in C#. JLinq operates on Iterables and performs lazy evaluation wherever possible (for example lazy evaluation is not possible when using `join` or 'groupBy').
 
 ## Getting started
 ### Dependency
@@ -81,7 +81,7 @@ List<Integer> three = query(Arrays.asList(1, 2, 3, 4, 5))
 
 **Sum/Avg/Min/Max**
 
-It necessary to use the numeric version of `query`: `queryn` in order to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation function always return `double`.
+It necessary to use the numeric version of `query`: `queryn` in order to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation functions always return a `double`.
 
 ```java
 double sum = queryn(Arrays.asList(1, 2, 3)).sum();

@@ -1,4 +1,4 @@
 package com.github.claassen.jlinq;
 
-public class JLinqGroupTest {
+public class JLinqSkip {
 }

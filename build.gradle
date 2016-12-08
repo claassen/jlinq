@@ -8,92 +8,14 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'maven-publish'
 apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'signing'
+apply plugin: 'maven'
 
 sourceCompatibility = '1.8'
 
-subprojects {
-
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    artifacts {
-        archives javadocJar, sourcesJar
-    }
-}
-
-if (project.hasProperty('release')) {
-    allprojects {
-        apply plugin: 'signing'
-        apply plugin: 'maven'
-
-        // Signature of artifacts
-        signing {
-            sign configurations.archives
-        }
-
-        // OSSRH publication
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    // POM signature
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-                    // Target repository
-                    repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
-                        authentication(userName: ossrhUser, password: ossrhPassword)
-                    }
-                    pom.version = "0.0.1-SNAPSHOT"
-                    pom.artifactId = "jlinq"
-                    pom.groupId = "com.github.claassen"
-                    pom.project {
-                        name 'JLinq'
-                        description 'A library for querying collections in a nicer way than the Java 8 Stream API'
-                        packaging 'jar'
-                        url 'https://github.com/claassen/jlinq'
-
-                        scm {
-                            connection 'scm:git:https://github.com/claassen/jlinq.git'
-                            developerConnection 'scm:git:git@github.com:claassen/jlinq.git'
-                            url 'https://github.com/claassen/jlinq.git'
-                        }
-
-                        licenses {
-                            license {
-                                name 'The MIT License (MIT)'
-                                url 'http://opensource.org/licenses/MIT'
-                                distribution 'repo'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id = 'claassen'
-                                name = 'Michael Claassen'
-                                email = 'mk.clssn@gmail.com'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-def ossrhUser='REPLACEME'
-def ossrhPassword='REPLACEME'
-
-nexusStaging {
-    username = ossrhUser
-    password = ossrhPassword
-}
+group = "com.github.claassen"
+version = "0.0.2"
 
 repositories {
     mavenCentral()
@@ -102,3 +24,73 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
 }
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+//https://oss.sonatype.org/#stagingRepositories
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // POM signature
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            // Target repository
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: ossrhUser, password: ossrhPassword)
+            }
+            pom.project {
+                name 'JLinq'
+                description 'A library for querying collections in a nicer way than the Java 8 Stream API'
+                packaging 'jar'
+                url 'https://github.com/claassen/jlinq'
+
+                scm {
+                    connection 'scm:git:https://github.com/claassen/jlinq.git'
+                    developerConnection 'scm:git:git@github.com:claassen/jlinq.git'
+                    url 'https://github.com/claassen/jlinq.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'http://opensource.org/licenses/MIT'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'claassen'
+                        name = 'Michael Claassen'
+                        email = 'mk.clssn@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+nexusStaging {
+    username = project.hasProperty('ossrhUser') ? project.property('ossrhUser') : 'nokey'
+    password = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : 'nokey'
+    packageGroup = "com.github.claassen"
+}
+
