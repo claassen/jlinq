@@ -53,7 +53,7 @@ if(project.hasProperty("release")) {
         sign configurations.archives
     }
 
-    //https://oss.sonatype.org/#stagingRepositories
+    //https://oss.sonatype.org
     uploadArchives {
         repositories {
             mavenDeployer {

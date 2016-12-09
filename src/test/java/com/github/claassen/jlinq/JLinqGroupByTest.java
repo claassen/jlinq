@@ -1,4 +1,44 @@
 package com.github.claassen.jlinq;
 
+import com.github.claassen.jlinq.helpers.TestClass;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.github.claassen.jlinq.JLinqCollection.query;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.junit.Assert.assertThat;
+
 public class JLinqGroupByTest {
+
+    @Test
+    public void testGroupBy() {
+        List<TestClass> items = Arrays.asList(
+            new TestClass(1, 1),
+            new TestClass(1, 2),
+            new TestClass(2, 3),
+            new TestClass(2, 4),
+            new TestClass(3, 5),
+            new TestClass(3, 6)
+        );
+
+        JLinqGroupBy<TestClass, Integer> groupBy = query(items).groupBy(x -> x.getX());
+
+        List<JLinqGroup<TestClass, Integer>> groups = groupBy.toList();
+
+        List<TestClass> group1 = groups.get(0).toList();
+        List<TestClass> group2 = groups.get(1).toList();
+        List<TestClass> group3 = groups.get(2).toList();
+
+        assertThat(group1.size(), equalTo(2));
+        assertThat(group1, hasItems(items.get(0), items.get(1)));
+
+        assertThat(group2.size(), equalTo(2));
+        assertThat(group2, hasItems(items.get(2), items.get(3)));
+
+        assertThat(group3.size(), equalTo(2));
+        assertThat(group3, hasItems(items.get(4), items.get(5)));
+    }
 }

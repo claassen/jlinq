@@ -25,4 +25,16 @@ public class Tuple<X, Y> {
     public void setY(Y y) {
         this.y = y;
     }
+
+    @Override
+    public int hashCode() {
+        return (x.toString() + "~" + y.toString()).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof Tuple &&
+                this.x.equals(((Tuple) other).getX()) &&
+                this.y.equals(((Tuple) other).getY());
+    }
 }

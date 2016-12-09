@@ -1,12 +1,14 @@
 package com.github.claassen.jlinq;
 
-public class JLinqNumericBase<T extends Number> extends JLinqBase<T> {
+import java.util.NoSuchElementException;
+
+public abstract class JLinqNumericBase<T extends Number> extends JLinqBase<T> {
 
     public double sum() {
         double sum = 0;
 
-        while(_hasNext.get()) {
-            sum += _next.get().doubleValue();
+        while(hasNext()) {
+            sum += next().doubleValue();
         }
 
         return sum;
@@ -16,18 +18,23 @@ public class JLinqNumericBase<T extends Number> extends JLinqBase<T> {
         double sum = 0;
         int count = 0;
 
-        while(_hasNext.get()) {
-            sum += _next.get().doubleValue();
+        while(hasNext()) {
+            sum += next().doubleValue();
+            count++;
         }
 
         return count != 0 ? sum / count : 0;
     }
 
     public double min() {
+        if(!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
         double min = Double.MAX_VALUE;
 
-        while(_hasNext.get()) {
-            double value = _next.get().doubleValue();
+        while(hasNext()) {
+            double value = next().doubleValue();
 
             if(value < min) {
                 min = value;
@@ -38,17 +45,22 @@ public class JLinqNumericBase<T extends Number> extends JLinqBase<T> {
     }
 
     public double max() {
-        double min = Double.MAX_VALUE;
+        if(!hasNext()) {
+            throw new NoSuchElementException();
+        }
 
-        while(_hasNext.get()) {
-            double value = _next.get().doubleValue();
+        double max = Double.MIN_VALUE;
 
-            if(value > min) {
-                min = value;
+        while(hasNext()) {
+            double value = next().doubleValue();
+
+            if(value > max) {
+                max = value;
             }
         }
 
-        return min;
+        return max;
     }
 
+    //TODO: median, mode
 }

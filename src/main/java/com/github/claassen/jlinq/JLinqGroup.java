@@ -1,14 +1,16 @@
 package com.github.claassen.jlinq;
 
+import java.util.Iterator;
+
 public class JLinqGroup<T, G> extends JLinqBase<T> {
 
     private G key;
 
-    public JLinqGroup(G key, JLinqBase<T> items) {
+    public JLinqGroup(G key, Iterator<T> items) {
         this.key = key;
 
-        setNext(() -> items._next.get());
-        setHasNext(() -> items._hasNext.get());
+        setNext(() -> items.next());
+        setHasNext(() -> items.hasNext());
     }
 
     public G key() {

@@ -5,32 +5,32 @@ import java.util.NoSuchElementException;
 
 public class JLinqUnion<T> extends JLinqBase<T> {
 
-    private JLinqBase<T> currentSource;
+    private Iterator<T> currentSource;
 
-    public JLinqUnion(Iterable<JLinqBase<T>> sources) {
-        Iterator<JLinqBase<T>> sourcesIter = sources.iterator();
+    public JLinqUnion(Iterable<Iterator<T>> sources) {
+        Iterator<Iterator<T>> sourcesIter = sources.iterator();
 
         currentSource = sourcesIter.hasNext() ? sourcesIter.next() : null;
 
         setNext(() -> {
-            if(currentSource != null && currentSource._hasNext.get()) {
-                return currentSource._next.get();
+            if(currentSource != null && currentSource.hasNext()) {
+                return currentSource.next();
             }
             else if(sourcesIter.hasNext()) {
                 currentSource = sourcesIter.next();
-                return currentSource._next.get();
+                return currentSource.next();
             }
 
             throw new NoSuchElementException();
         });
 
         setHasNext(() -> {
-            if(currentSource != null && currentSource._hasNext.get()) {
+            if(currentSource != null && currentSource.hasNext()) {
                 return true;
             }
             else if(sourcesIter.hasNext()) {
                 currentSource = sourcesIter.next();
-                return currentSource._hasNext.get();
+                return currentSource.hasNext();
             }
 
             return false;

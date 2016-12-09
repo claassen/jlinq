@@ -1,5 +1,6 @@
 package com.github.claassen.jlinq;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -8,7 +9,7 @@ public class JLinqWhere<T> extends JLinqBase<T> {
 
     private Optional<T> peekNext;
 
-    public JLinqWhere(Predicate<T> condition, JLinqBase<T> source) {
+    public JLinqWhere(Predicate<T> condition, Iterator<T> source) {
         peekNext = getNext(condition, source);
 
         setNext(() -> {
@@ -26,12 +27,12 @@ public class JLinqWhere<T> extends JLinqBase<T> {
         setHasNext(() -> peekNext.isPresent());
     }
 
-    private Optional<T> getNext(Predicate<T> condition, JLinqBase<T> source) {
-        while(source._hasNext.get()) {
-            T item = source._next.get();
+    private Optional<T> getNext(Predicate<T> condition, Iterator<T> source) {
+        while(source.hasNext()) {
+            T item = source.next();
 
             if(condition.test(item)) {
-                return Optional.of(item);
+                return Optional.ofNullable(item);
             }
         }
 

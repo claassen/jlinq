@@ -1,5 +1,6 @@
 package com.github.claassen.jlinq;
 
+import com.github.claassen.jlinq.helpers.TestClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -57,6 +58,7 @@ public class JLinqBaseTest {
 
         List<TestClass> itemsToList = base.toList();
 
+        assertThat(itemsToList.size(), equalTo(3));
         assertThat(itemsToList, hasItems(items.get(0), items.get(1), items.get(2)));
     }
 
@@ -90,47 +92,9 @@ public class JLinqBaseTest {
         assertThat(new TestJLinqBaseImplementation<>(makeItems()).reduce(1, (memo, item) -> memo + item.getY()), equalTo(13));
     }
 
-    class TestClass {
-        private Integer x;
-        private Integer y;
-
-        public TestClass(Integer x, Integer y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public Integer getX() {
-            return x;
-        }
-
-        public void setX(Integer x) {
-            this.x = x;
-        }
-
-        public Integer getY() {
-            return y;
-        }
-
-        public void setY(Integer y) {
-            this.y = y;
-        }
-
-        @Override
-        public int hashCode() {
-            return (this.x + "~" + this.y).hashCode();
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            return other instanceof TestClass &&
-                    ((TestClass) other).getX().equals(this.getX()) &&
-                    ((TestClass) other).getY().equals(this.getY());
-        }
-    }
-
     class TestJLinqBaseImplementation<T> extends JLinqBase<T> {
 
-        public TestJLinqBaseImplementation(List<T> items) {
+        public TestJLinqBaseImplementation(Iterable<T> items) {
             Iterator<T> iterator = items.iterator();
 
             setNext(() -> iterator.next());

@@ -1,5 +1,8 @@
 package com.github.claassen.jlinq;
 
+import com.github.claassen.jlinq.utils.ListUtil;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,11 +18,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
 
     private boolean fetched = false;
 
-    private Optional<Tuple<T, U>> peekNext;
+    private Tuple<T, U> peekNext;
 
     private BiPredicate<T, U> condition;
 
-    public JLinqJoin(BiPredicate<T, U> condition, JLinqBase<T> source1, JLinqBase<U> source2) {
+    public JLinqJoin(BiPredicate<T, U> condition, Iterator<T> source1, Iterator<U> source2) {
         this.condition = condition;
 
         setNext(() -> {
@@ -27,11 +30,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
                 fetch(source1, source2);
             }
 
-            if(!peekNext.isPresent()) {
+            if(peekNext == null) {
                 throw new NoSuchElementException();
             }
 
-            Tuple<T, U> result = peekNext.get();
+            Tuple<T, U> result = peekNext;
 
             peekNext = getNext();
 
@@ -43,11 +46,11 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
                 fetch(source1, source2);
             }
 
-            return peekNext.isPresent();
+            return peekNext != null;
         });
     }
 
-    private Optional<Tuple<T, U>> getNext() {
+    private Tuple<T, U> getNext() {
         while(source1Index < source1Items.size() && source2Index < source2Items.size()) {
             T item1 = source1Items.get(source1Index);
             U item2 = source2Items.get(source2Index);
@@ -60,20 +63,16 @@ public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {
             }
 
             if(condition.test(item1, item2)) {
-                return Optional.of(new Tuple<>(item1, item2));
+                return new Tuple<>(item1, item2);
             }
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    private boolean isMatch(Tuple<T, U> tuple) {
-        return tuple != null && condition.test(tuple.getX(), tuple.getY());
-    }
-
-    private void fetch(JLinqBase<T> source1, JLinqBase<U> source2) {
-        source1Items = source1.toList();
-        source2Items = source2.toList();
+    private void fetch(Iterator<T> source1, Iterator<U> source2) {
+        source1Items = ListUtil.toList(source1);
+        source2Items = ListUtil.toList(source2);
 
         peekNext = getNext();
 

@@ -8,7 +8,7 @@ public class JLinqGroupBy<T, G> extends JLinqBase<JLinqGroup<T, G>> {
     private Iterator<JLinqGroup<T, G>> iterator;
     private boolean fetched = false;
 
-    public JLinqGroupBy(Function<T, G> classifier, JLinqBase<T> source) {
+    public JLinqGroupBy(Function<T, G> classifier, Iterator<T> source) {
         setNext(() -> {
             if(!fetched) {
                 fetch(classifier, source);
@@ -25,11 +25,11 @@ public class JLinqGroupBy<T, G> extends JLinqBase<JLinqGroup<T, G>> {
         });
     }
 
-    private void fetch(Function<T, G> classifier, JLinqBase<T> source) {
+    private void fetch(Function<T, G> classifier, Iterator<T> source) {
         Map<G, List<T>> groups = new HashMap<>();
 
-        while(source._hasNext.get()) {
-            T item = source._next.get();
+        while(source.hasNext()) {
+            T item = source.next();
 
             G key = classifier.apply(item);
 
@@ -47,5 +47,7 @@ public class JLinqGroupBy<T, G> extends JLinqBase<JLinqGroup<T, G>> {
         }
 
         iterator = jlGroups.iterator();
+
+        fetched = true;
     }
 }

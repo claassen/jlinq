@@ -1,11 +1,12 @@
 package com.github.claassen.jlinq;
 
+import java.util.Iterator;
 import java.util.function.Function;
 
 public class JLinqMap<T, R> extends JLinqBase<R> {
 
-    public JLinqMap(Function<T, R> map, JLinqBase<T> source) {
-        setNext(() -> map.apply(source._next.get()));
-        setHasNext(() -> source._hasNext.get());
+    public JLinqMap(Function<T, R> map, Iterator<T> source) {
+        setNext(() -> map.apply(source.next()));
+        setHasNext(() -> source.hasNext());
     }
 }
