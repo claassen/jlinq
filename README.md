@@ -1,7 +1,7 @@
 # JLinq
 [![Build Status](https://travis-ci.org/claassen/jlinq.svg?branch=master)](https://travis-ci.org/claassen/jlinq) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A collection querying library alternative to Java 8 Streams with an API similar to Linq in C#. JLinq operates on Iterables and performs lazy evaluation wherever possible (for example lazy evaluation is not possible when using `join` or 'groupBy').
+A collection querying library alternative to Java 8 Streams with an API similar to Linq in C#. JLinq operates on Iterables and performs lazy evaluation wherever possible (for example lazy evaluation is not possible when using `join`).
 
 ## Getting started
 ### Dependency
@@ -11,18 +11,18 @@ A collection querying library alternative to Java 8 Streams with an API similar 
 <dependency>
     <groupId>com.github.claassen</groupId>
     <artifactId>jlinq</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 **Include as gradle dependency**
 
 ```
-compile 'com.github.claassen:jlinq:0.0.1'
+compile 'com.github.claassen:jlinq:1.0.0'
 ```
 
 ### Examples
-**Map/Reduce**
+**map/reduce**
 
 ```java
 int sum = query(Arrays.asList("1", "2", "3"))
@@ -30,7 +30,7 @@ int sum = query(Arrays.asList("1", "2", "3"))
     .reduce(0, (acc, i) -> acc + i);
 ```
 
-**Where**
+**where**
 
 ```java
 List<Integer> even = query(Arrays.asList(1, 2, 3, 4, 5))
@@ -38,7 +38,7 @@ List<Integer> even = query(Arrays.asList(1, 2, 3, 4, 5))
     .toList();
 ```
 
-**Group By**
+**groupBy**
 
 ```java
 List<MyClass> items = ...
@@ -51,7 +51,7 @@ List<Integer> groupSums = query(items)
     ).toList();
 ```
 
-**Join**
+**join**
 
 ```java
 List<MyClass> items1 = ...
@@ -62,7 +62,7 @@ List<Tuple<MyClass, MyOtherClass>> = query(items1)
     .toList();
 ```
 
-**Union**
+**union**
 
 ```java
 List<Integer> union = query(Arrays.asList(1, 2, 3))
@@ -71,23 +71,25 @@ List<Integer> union = query(Arrays.asList(1, 2, 3))
     .toList();
 ```
 
-**Take**
+**orderBy**
 
 ```java
-List<Integer> three = query(Arrays.asList(1, 2, 3, 4, 5))
-    .take(3)
-    .toList();
+List<MyClass> items = ...
+
+List<MyClass> ordered = query(items)
+	.orderBy(x -> x.getX())
+	.toList();
 ```
 
-**Skip**
+**reverse**
 
 ```java
-List<Integer> fourFive = query(Arrays.asList(1, 2, 3, 4, 5))
-    .skip(3)
-    .toList();
+List<Integer> reversed = query(Arrays.asList(1, 2, 3))
+	.reverse()
+	.toList();
 ```
 
-**Sum/Avg/Min/Max**
+**sum/avg/min/max**
 
 It necessary to use the numeric version of `query`: `queryn` in order to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation functions always return a `double`.
 
@@ -101,6 +103,62 @@ int max    = (int)queryn(Arrays.asList(1, 2, 3)).max();
 double sum = query(Arrays.asList("1", "2", "3"))
     .mapn(x -> Integer.parseInt(x))
     .sum();
+```
+
+**zip**
+
+```java
+List<Integer> items1 = Arrays.asList(1, 2, 3);
+List<Integer> items2 = Arrays.asList(4, 5, 6);
+
+//1, 4, 2, 5, 3, 6
+List<Integer> zipped = query(items1).zip(items2);
+```
+
+**first**
+
+```java
+Integer one = query(Arrays.asList(1, 2, 3)).first();
+```
+
+**last**
+
+```java
+Integer three = query(Arrays.asList(1, 2, 3)).last();
+```
+
+**get**
+
+```java
+Integer two = query(Arrays.asList(1, 2, 3)).get(1);
+```
+
+**take**
+
+```java
+List<Integer> oneTwoThree = query(Arrays.asList(1, 2, 3, 4, 5))
+    .take(3)
+    .toList();
+```
+
+**skip**
+
+```java
+List<Integer> fourFive = query(Arrays.asList(1, 2, 3, 4, 5))
+    .skip(3)
+    .toList();
+```
+
+**any**
+
+```java
+boolean yes = query(Arrays.asList(1, 2, 3)).any(x -> x == 2);
+```
+
+**forEach**
+
+```java
+query(Arrays.asList(1, 2, 3)).forEach(x -> System.out.println(x));
 ```
 
 

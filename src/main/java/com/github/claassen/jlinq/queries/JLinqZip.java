@@ -1,4 +1,6 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
+
+import com.github.claassen.jlinq.queries.base.JLinqBase;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,8 +13,16 @@ public class JLinqZip<T> extends JLinqBase<T> {
 
     private Optional<T> peekNext;
 
-    public JLinqZip(int start, List<Iterator<T>> sources) {
-        which = start;
+    public JLinqZip(int sourceStartIndex, List<Iterator<T>> sources) {
+        if(sourceStartIndex < 0) {
+            throw new IllegalArgumentException("Source start index cannot be negative");
+        }
+
+        if(sourceStartIndex >= sources.size()) {
+            throw new IllegalArgumentException("Source start index cannot be greater than number of sources");
+        }
+
+        which = sourceStartIndex;
 
         peekNext = getNext(sources);
 

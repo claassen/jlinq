@@ -1,11 +1,13 @@
 package com.github.claassen.jlinq;
 
+import com.github.claassen.jlinq.queries.JLinqTake;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.claassen.jlinq.JLinqCollection.query;
+import static com.github.claassen.jlinq.JLinq.query;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -55,5 +57,10 @@ public class JLinqTakeTest {
         assertThat(taken.get(2), equalTo(3));
         assertThat(taken.get(3), equalTo(4));
         assertThat(taken.get(4), equalTo(5));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTakeNegative() {
+        query(new ArrayList<>()).take(-1);
     }
 }

@@ -1,15 +1,11 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries.base;
 
+import com.github.claassen.jlinq.queries.*;
 import com.github.claassen.jlinq.utils.ListUtil;
 
 import java.util.*;
 import java.util.function.*;
 
-/**
- * Base class for all JLinq query objects.
- *
- * @param <T> Type of collection.
- */
 public abstract class JLinqBase<T> implements Iterator<T> {
 
     private Supplier<T> _next;
@@ -63,6 +59,32 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         return item;
     }
 
+    public T get(int index) {
+        int count = 0;
+        T item = null;
+
+        while(hasNext() && count <= index) {
+            item = next();
+            count++;
+        }
+
+        if(count == index + 1) {
+            return item;
+        }
+
+        throw new NoSuchElementException();
+    }
+
+    public boolean any(Predicate<T> predicate) {
+        while(hasNext()) {
+            if(predicate.test(next())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public <R> R reduce(R identity, BiFunction<R, T, R> accumulator) {
         R result = identity;
 
@@ -71,6 +93,12 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         }
 
         return result;
+    }
+
+    public void forEach(Consumer<T> action) {
+        while(hasNext()) {
+            action.accept(next());
+        }
     }
 
     public JLinqWhere<T> where(Predicate<T> predicate) {
@@ -111,7 +139,7 @@ public abstract class JLinqBase<T> implements Iterator<T> {
     }
 
     @SafeVarargs
-    public final JLinqZip<T> zip(int start, Iterable<T> ...otherSources) {
+    public final JLinqZip<T> zip(int sourceStartIndex, Iterable<T> ...otherSources) {
         List<Iterator<T>> sources = new ArrayList<>();
 
         sources.add(this);
@@ -120,10 +148,16 @@ public abstract class JLinqBase<T> implements Iterator<T> {
             sources.add(source.iterator());
         }
 
-        return new JLinqZip<>(start, sources);
+        return new JLinqZip<>(sourceStartIndex, sources);
     }
 
-    //TODO: orderBy, reverse, forEach, get, any,
+    public <C extends Comparable<C>> JLinqOrderBy<T, C> orderBy(Function<T, C> compareBy) {
+        return new JLinqOrderBy<>(compareBy, this);
+    }
+
+    public JLinqReverse<T> reverse() {
+        return new JLinqReverse<>(this);
+    }
 
     //TODO: BigInteger, BigDecimal
 }

@@ -1,13 +1,14 @@
 package com.github.claassen.jlinq;
 
 import com.github.claassen.jlinq.helpers.TestClass;
+import com.github.claassen.jlinq.queries.JLinqWhere;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.claassen.jlinq.JLinqCollection.query;
+import static com.github.claassen.jlinq.JLinq.query;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 

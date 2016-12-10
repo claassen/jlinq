@@ -1,4 +1,4 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.utils;
 
 public class Tuple<X, Y> {
 

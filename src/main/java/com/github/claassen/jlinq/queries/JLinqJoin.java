@@ -1,11 +1,12 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
 
+import com.github.claassen.jlinq.queries.base.JLinqBase;
 import com.github.claassen.jlinq.utils.ListUtil;
+import com.github.claassen.jlinq.utils.Tuple;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class JLinqJoin<T, U> extends JLinqBase<Tuple<T, U>> {

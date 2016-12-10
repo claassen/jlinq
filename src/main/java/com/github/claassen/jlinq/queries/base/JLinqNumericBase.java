@@ -1,4 +1,4 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries.base;
 
 import java.util.NoSuchElementException;
 

@@ -1,4 +1,6 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
+
+import com.github.claassen.jlinq.queries.base.JLinqBase;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
