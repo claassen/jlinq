@@ -87,6 +87,16 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         return false;
     }
 
+    public boolean all(Predicate<T> predicate) {
+        while(hasNext()) {
+            if(!predicate.test(next())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public <R> R reduce(R identity, BiFunction<R, T, R> accumulator) {
         R result = identity;
 
@@ -105,6 +115,10 @@ public abstract class JLinqBase<T> implements Iterator<T> {
 
     public JLinqWhere<T> where(Predicate<T> predicate) {
         return new JLinqWhere<>(predicate, this);
+    }
+
+    public JLinqExcept<T> except(Predicate<T> predicate) {
+        return new JLinqExcept<>(predicate, this);
     }
 
     public <R> JLinqMap<T, R> map(Function<T, R> map) {
@@ -173,7 +187,7 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         return new JLinqReverse<>(this);
     }
 
-    //TODO: skipWhile, takeWhile, intersect, *(union is wrong: concat, union), except (opposite of where), groupJoin?, all (like any),
+    //TODO: skipWhile, takeWhile, intersection, compliment (notIn), groupJoin?
 
     //TODO: BigInteger?
 }

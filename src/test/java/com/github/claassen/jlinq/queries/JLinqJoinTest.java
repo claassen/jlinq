@@ -1,7 +1,6 @@
 package com.github.claassen.jlinq.queries;
 
 import com.github.claassen.jlinq.helpers.TestClass;
-import com.github.claassen.jlinq.queries.JLinqJoin;
 import com.github.claassen.jlinq.utils.Tuple;
 import org.junit.Test;
 

@@ -104,6 +104,14 @@ public class JLinqBaseTest {
     }
 
     @Test
+    public void testAll() {
+        List<TestClass> items = makeItems();
+
+        assertThat(new TestJLinqBaseImplementation<>(items).all(x -> x.getX() > 0), equalTo(true));
+        assertThat(new TestJLinqBaseImplementation<>(items).all(x -> x.getX().equals(1)), equalTo(false));
+    }
+
+    @Test
     public void testReduce() {
         assertThat(new TestJLinqBaseImplementation<>(makeItems()).reduce(0, (memo, item) -> memo + item.getX()), equalTo(6));
         assertThat(new TestJLinqBaseImplementation<>(makeItems()).reduce(1, (memo, item) -> memo + item.getX()), equalTo(7));

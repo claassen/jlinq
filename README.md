@@ -11,14 +11,14 @@ A collection querying library alternative to Java 8 Streams with an API similar 
 <dependency>
     <groupId>com.github.claassen</groupId>
     <artifactId>jlinq</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 **Include as gradle dependency**
 
 ```
-compile 'com.github.claassen:jlinq:1.0.0'
+compile 'com.github.claassen:jlinq:1.0.2'
 ```
 
 ### Examples
@@ -35,6 +35,14 @@ int sum = query(Arrays.asList("1", "2", "3"))
 ```java
 List<Integer> even = query(Arrays.asList(1, 2, 3, 4, 5))
     .where(x -> x % 2 == 0)
+    .toList();
+```
+
+**except**
+
+```java
+List<Integer> odd = query(Arrays.asList(1, 2, 3, 4, 5))
+    .except(x -> x % 2 == 0)
     .toList();
 ```
 
@@ -65,9 +73,8 @@ List<Tuple<MyClass, MyOtherClass>> = query(items1)
 **union**
 
 ```java
-List<Integer> union = query(Arrays.asList(1, 2, 3))
+List<Integer> oneToSix = query(Arrays.asList(1, 2, 3))
     .union(Arrays.asList(4, 5, 6))
-    .union(Arrays.asList(7, 8, 9))
     .toList();
 ```
 
@@ -157,7 +164,15 @@ List<Integer> fourFive = query(Arrays.asList(1, 2, 3, 4, 5))
 **any**
 
 ```java
-boolean yes = query(Arrays.asList(1, 2, 3)).any(x -> x == 2);
+boolean yes = query(Arrays.asList(1, 2, 3))
+	.any(x -> x == 2);
+```
+
+**all**
+
+```java
+boolean no = query(Arrays.asList(1, 2, 3))
+	.all(x -> x % 2 == 1);
 ```
 
 **forEach**
