@@ -1,10 +1,11 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
 
 import com.github.claassen.jlinq.helpers.TestClass;
 import com.github.claassen.jlinq.queries.JLinqGroup;
 import com.github.claassen.jlinq.queries.JLinqGroupBy;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,5 +46,7 @@ public class JLinqGroupByTest {
         assertThat(group3.size(), equalTo(2));
         assertThat(group3.get(0), is(items.get(4)));
         assertThat(group3.get(1), is(items.get(5)));
+
+        query(items).mapn(x -> new BigDecimal(x.getX())).sum();
     }
 }

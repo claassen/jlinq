@@ -1,4 +1,4 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
 
 import com.github.claassen.jlinq.queries.JLinqSkip;
 import org.junit.Test;

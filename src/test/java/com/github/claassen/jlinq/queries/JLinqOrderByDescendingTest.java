@@ -1,4 +1,4 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries;
 
 import com.github.claassen.jlinq.helpers.TestClass;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import static com.github.claassen.jlinq.JLinq.query;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class JLinqOrderByTest {
+public class JLinqOrderByDescendingTest {
 
     @Test
     public void testOrderBy() {
@@ -22,18 +22,18 @@ public class JLinqOrderByTest {
             new TestClass(2, 4)
         );
 
-        List<TestClass> ordered = query(items).orderBy(x -> x.getX()).toList();
+        List<TestClass> ordered = query(items).orderByDescending(x -> x.getX()).toList();
 
         assertThat(ordered.size(), equalTo(4));
-        assertThat(ordered.get(0), equalTo(items.get(1)));
-        assertThat(ordered.get(1), equalTo(items.get(3)));
-        assertThat(ordered.get(2), equalTo(items.get(0)));
-        assertThat(ordered.get(3), equalTo(items.get(2)));
+        assertThat(ordered.get(0), equalTo(items.get(2)));
+        assertThat(ordered.get(1), equalTo(items.get(0)));
+        assertThat(ordered.get(2), equalTo(items.get(3)));
+        assertThat(ordered.get(3), equalTo(items.get(1)));
     }
 
     @Test
     public void testOrderByEmpty() {
-        List<TestClass> ordered = query(new ArrayList<TestClass>()).orderBy(x -> x.getX()).toList();
+        List<TestClass> ordered = query(new ArrayList<TestClass>()).orderByDescending(x -> x.getX()).toList();
 
         assertThat(ordered.size(), equalTo(0));
     }

@@ -1,13 +1,11 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries.base;
 
 import com.github.claassen.jlinq.helpers.TestClass;
-import com.github.claassen.jlinq.queries.base.JLinqBase;
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

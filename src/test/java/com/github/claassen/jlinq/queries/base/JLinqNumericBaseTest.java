@@ -1,6 +1,5 @@
-package com.github.claassen.jlinq;
+package com.github.claassen.jlinq.queries.base;
 
-import com.github.claassen.jlinq.queries.base.JLinqNumericBase;
 import org.junit.Test;
 
 import java.util.*;

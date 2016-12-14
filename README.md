@@ -71,13 +71,14 @@ List<Integer> union = query(Arrays.asList(1, 2, 3))
     .toList();
 ```
 
-**orderBy**
+**orderBy/thenBy**
 
 ```java
 List<MyClass> items = ...
 
 List<MyClass> ordered = query(items)
 	.orderBy(x -> x.getX())
+	.thenBy(x -> x.getY())
 	.toList();
 ```
 
@@ -91,7 +92,7 @@ List<Integer> reversed = query(Arrays.asList(1, 2, 3))
 
 **sum/avg/min/max**
 
-It necessary to use the numeric version of `query`: `queryn` in order to perform numerical aggregation functions. Alternatively and already non-numeric query object can be converted into a numeric query object using `mapn`. Numeric aggregation functions always return a `double`.
+It necessary to use a numeric version of `query`: `queryn` or 'queryd' in order to perform numerical aggregation functions. Alternatively an already non-numeric query object can be converted into a numeric query object using `mapn` or `mapd`. `queryn` and `mapn` operate using double values, while `queryd` and `mapd` operate using `BigDecimal` values.
 
 ```java
 double sum = queryn(Arrays.asList(1, 2, 3)).sum();
@@ -103,6 +104,10 @@ int max    = (int)queryn(Arrays.asList(1, 2, 3)).max();
 double sum = query(Arrays.asList("1", "2", "3"))
     .mapn(x -> Integer.parseInt(x))
     .sum();
+    
+BigDecimal sum = query(Arrays.asList("1", "2", "3"))
+	.mapd(x -> new BigDecimal(x))
+	.sum();
 ```
 
 **zip**

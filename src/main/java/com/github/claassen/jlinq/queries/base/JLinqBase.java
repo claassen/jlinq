@@ -3,6 +3,8 @@ package com.github.claassen.jlinq.queries.base;
 import com.github.claassen.jlinq.queries.*;
 import com.github.claassen.jlinq.utils.ListUtil;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 import java.util.function.*;
 
@@ -113,6 +115,14 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         return new JLinqNumericMap<>(map, this);
     }
 
+    public <R extends BigDecimal> JLinqBigDecimalMap<T, R> mapd(Function<T, R> map) {
+        return new JLinqBigDecimalMap<>(map, this, MathContext.UNLIMITED);
+    }
+
+    public <R extends BigDecimal> JLinqBigDecimalMap<T, R> mapd(Function<T, R> map, MathContext roundingMode) {
+        return new JLinqBigDecimalMap<>(map, this, roundingMode);
+    }
+
     public <U> JLinqJoin<T, U> join(Iterable<U> source2, BiPredicate<T, U> predicate) {
         return new JLinqJoin<>(predicate, this, source2.iterator());
     }
@@ -155,9 +165,15 @@ public abstract class JLinqBase<T> implements Iterator<T> {
         return new JLinqOrderBy<>(compareBy, this);
     }
 
+    public <C extends Comparable<C>> JLinqOrderByDescending<T, C> orderByDescending(Function<T, C> compareBy) {
+        return new JLinqOrderByDescending<>(compareBy, this);
+    }
+
     public JLinqReverse<T> reverse() {
         return new JLinqReverse<>(this);
     }
 
-    //TODO: BigInteger, BigDecimal
+    //TODO: skipWhile, takeWhile, intersect, *(union is wrong: concat, union), except (opposite of where), groupJoin?, all (like any),
+
+    //TODO: BigInteger?
 }
