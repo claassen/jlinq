@@ -7,10 +7,15 @@ import com.github.claassen.jlinq.queries.base.JLinqBigDecimalBase;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Iterator;
 
 public class JLinq {
 
     public static <U> JLinqCollection<U> query(Iterable<U> collection) {
+        return new JLinqCollection<>(collection);
+    }
+
+    public static <U> JLinqCollection<U> query(Iterator<U> collection) {
         return new JLinqCollection<>(collection);
     }
 
